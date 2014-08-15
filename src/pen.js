@@ -43,6 +43,12 @@
   };
 
   // merge: make it easy to have a fallback
+  /**
+   * [merge description]
+   * @param  {[type]} config [description]
+   * toolBarId 固定toolBar位置，默认无
+   * @return {[type]}        [description]
+   */
   utils.merge = function(config) {
 
     // default settings
@@ -142,7 +148,7 @@
       if((name === 'createlink')) icons += '<input class="pen-input" placeholder="http://" />';
     }
 
-    var menu = doc.createElement('div');
+    var menu = (config.toolBarId  && doc.getElementById(config.toolBarId)) ? doc.getElementById(config.toolBarId) : doc.createElement('div');
     menu.setAttribute('class', this.config.class + '-menu pen-menu');
     menu.innerHTML = icons;
     menu.style.display = 'none';
