@@ -120,6 +120,8 @@
   // node effects
   Pen.prototype._effectNode = function(el, returnAsNodeName) {
     var nodes = [];
+    if(!el)
+      return;
     while(el !== this.config.editor) {
       if(el.nodeName.match(/(?:[pubia]|h[1-6]|blockquote|[uo]l|li)/i)) {
         nodes.push(returnAsNodeName ? el.nodeName.toLowerCase() : el);
@@ -147,13 +149,11 @@
       icons += '<i class="' + klass + '" data-action="' + name + '">' + (name.match(/^h[1-6]|p$/i) ? name.toUpperCase() : '') + '</i>';
       if((name === 'createlink')) icons += '<input class="pen-input" placeholder="http://" />';
     }
-
-    var menu = (config.toolBarId  && doc.getElementById(config.toolBarId)) ? doc.getElementById(config.toolBarId) : doc.createElement('div');
+    var menu =  doc.getElementById(this.config.toolBarId);
     menu.setAttribute('class', this.config.class + '-menu pen-menu');
     menu.innerHTML = icons;
-    menu.style.display = 'none';
-
-    doc.body.appendChild((this._menu = menu));
+    menu.style.display = 'block';
+    this._menu = menu;
 
     var setpos = function() {
       if(menu.style.display === 'block') that.menu();
@@ -170,14 +170,8 @@
 
       utils.shift('toggle_menu', function() {
         var range = that._sel;
-        if(!range.isCollapsed) {
-          //show menu
-          that._range = range.getRangeAt(0);
-          that.menu().highlight();
-        } else {
-          //hide menu
-          that._menu.style.display = 'none';
-        }
+        that._range = range.getRangeAt(0);
+        that.menu().highlight();
       }, 200);
     };
 
@@ -196,9 +190,11 @@
       var apply = function(value) {
         that._sel.removeAllRanges();
         that._sel.addRange(that._range);
+        if(!that._sel.getRangeAt(0))
+          return;
         that._actions(action, value);
         that._range = that._sel.getRangeAt(0);
-        that.highlight().nostyle().menu();
+        that.highlight();
       };
 
       // create link
@@ -356,7 +352,9 @@
     }
     // display block to caculate its width & height
     menu.style.display = 'block';
-
+    if(this.config.toolBarId){
+      return this;
+    }
     menuOffset.x = left - (menu.clientWidth/2);
     menuOffset.y = top - menu.clientHeight;
 
