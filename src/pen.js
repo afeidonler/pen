@@ -155,13 +155,13 @@
     menu.style.display = 'block';
     this._menu = menu;
 
-    var setpos = function() {
-      if(menu.style.display === 'block') that.menu();
-    };
+    // var setpos = function() {
+    //   if(menu.style.display === 'block') that.menu();
+    // };
 
     // change menu offset when window resize / scroll
-    window.addEventListener('resize', setpos);
-    window.addEventListener('scroll', setpos);
+    // window.addEventListener('resize', setpos);
+    // window.addEventListener('scroll', setpos);
 
     var editor = this.config.editor;
     var toggle = function() {
@@ -171,7 +171,7 @@
       utils.shift('toggle_menu', function() {
         var range = that._sel;
         that._range = range.getRangeAt(0);
-        that.menu().highlight();
+        that.highlight();
       }, 200);
     };
 
